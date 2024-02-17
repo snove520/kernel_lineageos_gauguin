@@ -17,6 +17,9 @@ jobs:
       - name: "😄 Checkout"
         uses: actions/checkout@v4
 
+      - name: "😄 cache"
+        uses: actions/cache@v4
+        
       - name: "😆 Generate Matrix"
         id: generate-matrix
         run: |
@@ -91,7 +94,6 @@ jobs:
           CROSS_COMPILE_COMPAT=$(echo $params | jq -r ".CROSS_COMPILE_COMPAT")
           CROSS_COMPILE_ARM32=$(echo $params | jq -r ".CROSS_COMPILE_ARM32")
           CLANG_TRIPLE=$(echo $params | jq -r ".CLANG_TRIPLE")
-          AR=$(echo $params | jq -r ".AR")
           CC=$(echo $params | jq -r ".CC")
 
           echo "ARCH=$ARCH" >> $GITHUB_ENV
@@ -112,9 +114,6 @@ jobs:
           fi
           if [ -n "$CROSS_COMPILE_COMPAT" ]; then
             args="$args CROSS_COMPILE_ARM32=$CROSS_COMPILE_COMPAT"
-          fi
-          if [ -n "$AR" ]; then
-            args="$args AR=$AR"
           fi
           if [ -n "$CC" ]; then
             args="$args CC=$CC"
