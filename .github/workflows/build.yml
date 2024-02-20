@@ -140,6 +140,28 @@ jobs:
           echo "PATH Variable: $PATH"
           make ${{ env.args }} ${{ env.DEFCONFIG_NAME }}
 
+      - name: "Increase ARG_MAX limit"
+        run: |
+          sudo sysctl -w kernel.core_pattern=|/bin/false
+          sudo sysctl -w kernel.core_uses_pid=0
+          sudo sysctl -w fs.suid_dumpable=0
+          sudo sysctl -w fs.aio-max-nr=524288
+          sudo sysctl -w fs.file-max=524288
+          sudo sysctl -w kernel.shmall=536870912
+          sudo sysctl -w kernel.shmmax=536870912
+          sudo sysctl -w kernel.shmmni=524288
+          sudo sysctl -w kernel.sem=250 32000 100 128
+          sudo sysctl -w net.ipv4.ip_local_port_range="1024 65000"
+          sudo sysctl -w net.ipv4.tcp_max_syn_backlog=20000
+          sudo sysctl -w net.core.netdev_max_backlog=16384
+          sudo sysctl -w net.core.somaxconn=16384
+          sudo sysctl -w net.ipv4.tcp_max_tw_buckets=1440000
+          sudo sysctl -w net.ipv4.tcp_fin_timeout=15
+          sudo sysctl -w net.ipv4.tcp_keepalive_time=300
+          sudo sysctl -w net.ipv4.tcp_tw_reuse=1
+          sudo sysctl -w net.ipv4.tcp_max_orphans=131072
+          sudo sysctl -w net.ipv4.ip_forward=1
+
       - name: "🎶 Build kernel"
         working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
         env:
