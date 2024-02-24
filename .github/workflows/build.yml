@@ -104,7 +104,7 @@ jobs:
 
           echo "ARCH=$ARCH" >> $GITHUB_ENV
 
-          args="-j$(nproc --all)"
+          args="-j1"
           if [ -n "${{ env.OUT_DIR }}" ]; then
             mkdir -p $(pwd)/${{ env.OUT_DIR }}
             args="$args O=$(pwd)/${{ env.OUT_DIR }}"
@@ -131,6 +131,9 @@ jobs:
         run: |
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
 
+      - name: Set MAKEFLAGS to reduce parallel jobs
+        run: echo "MAKEFLAGS=-j1" >> $GITHUB_ENV
+  
       - name: "👍 Make defconfig"
         working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
         env:
