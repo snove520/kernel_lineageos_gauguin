@@ -3,7 +3,7 @@ name: Build kernel for lineageos
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 5 /2 * *"
+    - cron: "0 5 */2 * *"
 
 jobs:
   build:
